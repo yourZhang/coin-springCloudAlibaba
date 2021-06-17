@@ -44,3 +44,9 @@ selenium-debug.log
 *.zip
 
 package-lock.json
+# zys
+*.iml
+.idea
+.idea/*
+target
+target/
