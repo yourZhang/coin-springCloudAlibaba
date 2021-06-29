@@ -60,6 +60,5 @@ spring:
           ruleType: gw_api_group # 我们演示了sentinel-dashboard 的规则的定义，而且规则定义好了后，我们的网关能立马的感知到（生效）（nacos无法感知），但是我们下次重启，会丢失规则。--》nacos
 
   redis:
-    host: www.killberos.cn
-    port: 5000
-    password: lalala.123456
+    host: 127.0.0.1
+    port: 6379
