@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 
 /**
-    * 人民币充值卡号管理
-    */
-@ApiModel(value="com-bjsxt-domain-AdminBank")
+ * 人民币充值卡号管理
+ */
+@ApiModel(value = "com-killb-domain-AdminBank")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,14 +25,14 @@ public class AdminBank {
      * 主键
      */
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value="主键")
+    @ApiModelProperty(value = "主键")
     private Long id;
 
     /**
      * 开户人姓名
      */
     @TableField(value = "name")
-    @ApiModelProperty(value="开户人姓名")
+    @ApiModelProperty(value = "开户人姓名")
     @NotBlank
     private String name;
 
@@ -40,7 +40,7 @@ public class AdminBank {
      * 开户行名称
      */
     @TableField(value = "bank_name")
-    @ApiModelProperty(value="开户行名称")
+    @ApiModelProperty(value = "开户行名称")
     @NotBlank
     private String bankName;
 
@@ -48,7 +48,7 @@ public class AdminBank {
      * 卡号
      */
     @TableField(value = "bank_card")
-    @ApiModelProperty(value="卡号")
+    @ApiModelProperty(value = "卡号")
     @NotBlank
     private String bankCard;
 
@@ -56,20 +56,34 @@ public class AdminBank {
      * 充值转换换币种ID
      */
     @TableField(value = "coin_id")
-    @ApiModelProperty(value="充值转换换币种ID")
+    @ApiModelProperty(value = "充值转换换币种ID")
     private Long coinId;
 
     /**
      * 币种名称
      */
     @TableField(value = "coin_name")
-    @ApiModelProperty(value="币种名称")
+    @ApiModelProperty(value = "币种名称")
     private String coinName;
 
     /**
      * 状态：0-无效；1-有效；
      */
     @TableField(value = "status")
-    @ApiModelProperty(value="状态：0-无效；1-有效；")
+    @ApiModelProperty(value = "状态：0-无效；1-有效；")
     private Byte status;
+
+    public static final String COL_ID = "id";
+
+    public static final String COL_NAME = "name";
+
+    public static final String COL_BANK_NAME = "bank_name";
+
+    public static final String COL_BANK_CARD = "bank_card";
+
+    public static final String COL_COIN_ID = "coin_id";
+
+    public static final String COL_COIN_NAME = "coin_name";
+
+    public static final String COL_STATUS = "status";
 }

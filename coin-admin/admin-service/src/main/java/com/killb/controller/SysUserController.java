@@ -32,6 +32,7 @@ public class SysUserController {
     private SysUserService sysUserService;
 
     @GetMapping
+    @ApiOperation(value = "查询员工")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "current", value = "当前页"),
             @ApiImplicitParam(name = "size", value = "每页显示的条数"),

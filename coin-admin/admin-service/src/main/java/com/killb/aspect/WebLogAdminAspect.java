@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+//@Component
 @Aspect
 @Order(2)
 @Slf4j
@@ -82,7 +82,7 @@ public class WebLogAdminAspect {
         webLog.setUri(request.getRequestURI()); // 设置请求的uri
         webLog.setUrl(url);
         webLog.setBasePath(StrUtil.removeSuffix(url, URLUtil.url(url).getPath())); // http://ip:port/
-        webLog.setUsername(authentication == null ? "anonymous" : authentication.getPrincipal().toString()); // 获取用户的id
+        webLog.setUsername(authentication.getPrincipal().toString().equals("anonymousUser") ? "0" : authentication.getPrincipal().toString()); // 获取用户的id
         webLog.setIp(request.getRemoteAddr()); // TODO 获取ip 地址
 
 
@@ -100,14 +100,13 @@ public class WebLogAdminAspect {
         webLog.setResult(result);
 
         SysUserLog sysUserLog = new SysUserLog();
-
         sysUserLog.setId(snowflake.nextId());
         sysUserLog.setCreated(new Date());
         sysUserLog.setDescription(webLog.getDescription());
         sysUserLog.setGroup(webLog.getDescription());
         sysUserLog.setUserId(Long.valueOf(webLog.getUsername()));
         sysUserLog.setMethod(webLog.getMethod());
-        sysUserLog.setIp(sysUserLog.getIp());
+        sysUserLog.setIp(webLog.getIp());
         sysUserLogService.save(sysUserLog);
         return result;
     }

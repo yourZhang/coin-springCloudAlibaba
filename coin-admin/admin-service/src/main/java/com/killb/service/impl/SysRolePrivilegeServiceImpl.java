@@ -4,14 +4,19 @@ import com.alibaba.nacos.client.naming.utils.CollectionUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.killb.domain.SysMenu;
 import com.killb.domain.SysPrivilege;
+import com.killb.domain.SysRoleMenu;
 import com.killb.model.RolePrivilegesParam;
 import com.killb.service.SysMenuService;
 import com.killb.service.SysPrivilegeService;
+import com.killb.service.SysRoleMenuService;
 import com.killb.service.SysRolePrivilegeService;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -90,12 +95,18 @@ public class SysRolePrivilegeServiceImpl extends ServiceImpl<SysRolePrivilegeMap
      * @param rolePrivilegesParam
      * @return
      */
+    @Autowired
+    private SysRoleMenuService sysRoleMenuService;
+
+
     @Transactional
     @Override
     public boolean grantPrivileges(RolePrivilegesParam rolePrivilegesParam) {
         Long roleId = rolePrivilegesParam.getRoleId(); // 角色Id
         //1 先删除之前该角色的权限
         sysRolePrivilegeService.remove(new LambdaQueryWrapper<SysRolePrivilege>().eq(SysRolePrivilege::getRoleId, roleId));
+        //todo 先删除以前拥有的菜单
+        sysRoleMenuService.remove(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, roleId));
         // 移除之前的值成功
         List<Long> privilegeIds = rolePrivilegesParam.getPrivilegeIds();
         if (!CollectionUtils.isEmpty(privilegeIds)) {
@@ -108,10 +119,65 @@ public class SysRolePrivilegeServiceImpl extends ServiceImpl<SysRolePrivilegeMap
             }
             // 2 新增新的值
             boolean b = sysRolePrivilegeService.saveBatch(sysRolePrivileges);
-            return b;
+            //todo 1  有了对应的权限就该有对应的菜单了 添加新菜单
+            //查询权限所拥有的菜单项id
+            List<SysPrivilege> sysPrivileges = sysPrivilegeService.listByIds(privilegeIds);
+            List<@NotNull Long> menuIdList = sysPrivileges.stream().map(SysPrivilege::getMenuId).distinct().collect(Collectors.toList());
+            List<SysRoleMenu> sysRoleMenus = new ArrayList<>();
+            menuIdList.forEach((v) -> {
+                SysRoleMenu sysRoleMenu = new SysRoleMenu();
+                sysRoleMenu.setMenuId(v);
+                sysRoleMenu.setRoleId(roleId);
+                sysRoleMenus.add(sysRoleMenu);
+            });
+            //todo 2 还要添加父级菜单 不然前端无法展示
+            //通过菜单id查询父级菜单id
+            List<SysMenu> parentIdList = sysMenuService.listByIds(menuIdList);
+            List<Long> collect = parentIdList.stream().map(SysMenu::getParentId).distinct().collect(Collectors.toList());
+            collect.forEach((v) -> {
+                SysRoleMenu sysRoleMenu = new SysRoleMenu();
+                sysRoleMenu.setMenuId(v);
+                sysRoleMenu.setRoleId(roleId);
+                sysRoleMenus.add(sysRoleMenu);
+            });
+            boolean b1 = sysRoleMenuService.saveBatch(sysRoleMenus);
+            //todo 3 2011year11月20号发现漏洞 子菜单应该全部携带，递归查询所有子菜单并建立关系
+            List<Long> menuIds = selectPrentMenu(menuIdList);
+            List<SysRoleMenu> sysRoleMenus2 = new ArrayList<>();
+            menuIds.forEach((v) -> {
+                SysRoleMenu sysRoleMenu = new SysRoleMenu();
+                sysRoleMenu.setMenuId(v);
+                sysRoleMenu.setRoleId(roleId);
+                sysRoleMenus2.add(sysRoleMenu);
+            });
+            boolean b2 = sysRoleMenuService.saveBatch(sysRoleMenus2);
+            return b && b1 && b2;
         }
         // 2 新增该角色的权限
         return true;
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈递归查询所有子菜单〉
+     *
+     * @Param: [menuIdList]
+     * @return: void
+     * @Author: xiaozhang666
+     * @Date: 2021/11/30 15:11
+     */
+    private List<Long> selectPrentMenu(List<Long> menuIdList) {
+        if (menuIdList.size() == 0) {
+            return Collections.EMPTY_LIST;
+        }
+        List<Long> idList = new ArrayList<>();
+        menuIdList.forEach(v -> {
+            List<SysMenu> list = sysMenuService.list(new LambdaQueryWrapper<SysMenu>().eq(SysMenu::getParentId, v));
+            List<Long> collect = list.stream().map(SysMenu::getId).collect(Collectors.toList());
+            idList.addAll(collect);
+        });
+        idList.addAll(selectPrentMenu(idList));
+        return idList;
     }
 
 }

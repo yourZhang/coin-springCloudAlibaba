@@ -60,6 +60,7 @@
         </dependency>
 
         <!--mapStruct依赖 高性能对象映射-->
+        <!--mapStruct依赖 高性能对象映射-->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-jdk8</artifactId>
@@ -68,6 +69,7 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
         </dependency>
+
         <!--        配置文件处理-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

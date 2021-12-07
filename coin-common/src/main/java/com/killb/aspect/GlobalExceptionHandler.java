@@ -24,7 +24,15 @@ public class GlobalExceptionHandler {
         }
         return R.fail(exception.getMessage());
     }
-
+    //EmptyResultDataAccessException
+    @ExceptionHandler(value = Exception.class)
+    public R handlerApiException(Exception exception) {
+        String errorCode = exception.getMessage();
+        if (errorCode != null) {
+            return R.fail(errorCode);
+        }
+        return R.fail(exception.getMessage());
+    }
     /**
      * 2 方法参数校验失败的异常
      * MethodArgumentNotValidException

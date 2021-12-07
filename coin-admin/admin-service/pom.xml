@@ -16,7 +16,12 @@
             <artifactId>admin-api</artifactId>
             <version>1.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.killb</groupId>
+            <artifactId>member-api</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>com.killb</groupId>
             <artifactId>coin-common</artifactId>
