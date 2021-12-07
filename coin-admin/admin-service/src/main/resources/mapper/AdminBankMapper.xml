@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.killb.mapper.AdminBankMapper">
+  <resultMap id="BaseResultMap" type="com.killb.domain.AdminBank">
+    <!--@mbg.generated-->
+    <!--@Table admin_bank-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
+    <result column="bank_card" jdbcType="VARCHAR" property="bankCard" />
+    <result column="coin_id" jdbcType="BIGINT" property="coinId" />
+    <result column="coin_name" jdbcType="VARCHAR" property="coinName" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, bank_name, bank_card, coin_id, coin_name, `status`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from admin_bank
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from admin_bank
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.killb.domain.AdminBank" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into admin_bank (`name`, bank_name, bank_card, 
+      coin_id, coin_name, `status`
+      )
+    values (#{name,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{bankCard,jdbcType=VARCHAR}, 
+      #{coinId,jdbcType=BIGINT}, #{coinName,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.killb.domain.AdminBank" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into admin_bank
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="bankName != null">
+        bank_name,
+      </if>
+      <if test="bankCard != null">
+        bank_card,
+      </if>
+      <if test="coinId != null">
+        coin_id,
+      </if>
+      <if test="coinName != null">
+        coin_name,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCard != null">
+        #{bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="coinId != null">
+        #{coinId,jdbcType=BIGINT},
+      </if>
+      <if test="coinName != null">
+        #{coinName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.killb.domain.AdminBank">
+    <!--@mbg.generated-->
+    update admin_bank
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCard != null">
+        bank_card = #{bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="coinId != null">
+        coin_id = #{coinId,jdbcType=BIGINT},
+      </if>
+      <if test="coinName != null">
+        coin_name = #{coinName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.killb.domain.AdminBank">
+    <!--@mbg.generated-->
+    update admin_bank
+    set `name` = #{name,jdbcType=VARCHAR},
+      bank_name = #{bankName,jdbcType=VARCHAR},
+      bank_card = #{bankCard,jdbcType=VARCHAR},
+      coin_id = #{coinId,jdbcType=BIGINT},
+      coin_name = #{coinName,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

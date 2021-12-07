@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: member-service
+  profiles:  #切换到开发环境上面
+    active: dev
+  cloud:
+    nacos:  #配置Nacos的地址
+      server-addr: 127.0.0.1:8848
+      config:  # 配置文件的扩展名
+        file-extension: yaml
+# 拉取的配置文件的dataID =  member-service-dev.yaml
